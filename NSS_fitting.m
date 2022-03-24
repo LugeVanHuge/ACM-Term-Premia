@@ -19,6 +19,8 @@ function NSS_params = NSS_fitting(yieldcurve,n_vec)
     % objective function
     err = @(params) sum(sum((yieldcurve-NSS_yield(params)).^2));
     % optimisation
-    params_guess = ones(T,6).*[0.06 0.14 0.1 -0.05 -0.01 -0.02];
-    NSS_params = fminunc(err,params_guess);
+    options = optimoptions(@fminunc,'StepTolerance',5e-4,...
+        'MaxFunctionEvaluations',1e6,'MaxIterations',1e4);
+    params_guess = ones(T,6)*0.05;
+    NSS_params = fminunc(err,params_guess,options);
 end
